@@ -130,12 +130,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics.Contracts;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Diagnostics.CodeAnalysis;
 
 #if LINQ
 using System.Linq;
@@ -221,6 +223,7 @@ namespace Mono.Options
 
 		private static int GetLineEnd (int start, int length, string description)
 		{
+			Contract.Requires(start >= 0);
 			int end = System.Math.Min (start + length, description.Length);
 			int sep = -1;
 			for (int i = start; i < end; ++i) {
@@ -254,7 +257,7 @@ namespace Mono.Options
 		#region ICollection<T>
 		public void Add (string item)                       {values.Add (item);}
 		public void Clear ()                                {values.Clear ();}
-		public bool Contains (string item)                  {return values.Contains (item);}
+		public bool Contains (string item)                  {return (values.Count > 0) && values.Contains (item);}
 		public void CopyTo (string[] array, int arrayIndex) {values.CopyTo (array, arrayIndex);}
 		public bool Remove (string item)                    {return values.Remove (item);}
 		public int Count                                    {get {return values.Count;}}
